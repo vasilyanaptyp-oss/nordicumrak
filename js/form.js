@@ -1,7 +1,7 @@
 (function () {
   var form = document.getElementById('qform');
   if (!form) return;
-  var RELAY = 'https://script.google.com/macros/s/AKfycbxG8sh9Xi-msP2Ol6iG9FBB__M4_Btafq6KlNpsJNSXS-XnmKKVrajYfpyaGgVzA8zG/exec', SITE = 'nordicum', MAIL = 'ardo.tammissaar@gmail.com';
+  var RELAY = 'https://script.google.com/macros/s/AKfycbxG8sh9Xi-msP2Ol6iG9FBB__M4_Btafq6KlNpsJNSXS-XnmKKVrajYfpyaGgVzA8zG/exec', SITE = 'nordicum', MAIL = 'ardo.tammissaar@gmail.com', WA_NUM = '37253461066';
   var MAX_PHOTOS = 6, MAX_SIDE = 1600, QUALITY = 0.8, MAX_ORIG = 4 * 1024 * 1024, MAX_TOTAL = 12 * 1024 * 1024, TIMEOUT = 25000;
   function field(id) { return document.getElementById(id); }
   var nameIn = field('f-name'), contactIn = field('f-contact'), sum = field('f-sum');
@@ -115,16 +115,25 @@
           hp: hp.value, t: firstFocus ? Date.now() - firstFocus : 0, photos: list });
       });
   }
+  function lines() {
+    return ['Nimi: ' + val('f-name'), 'Telefon või e-post: ' + val('f-contact'), 'Töö: ' + (svcVal() || '-'),
+            'Objekti asukoht: ' + (val('f-place') || '-'), '', val('f-msg')];
+  }
   function mailHref() {
-    var lines = ['Nimi: ' + val('f-name'), 'Telefon või e-post: ' + val('f-contact'), 'Töö: ' + svcVal(),
-                 'Objekti asukoht: ' + val('f-place'), '', val('f-msg')];
-    return 'mailto:' + MAIL + '?subject=' + encodeURIComponent('Päring kodulehelt: ' + (svcVal() || 'üldehitustööd')) + '&body=' + encodeURIComponent(lines.join('\r\n'));
+    return 'mailto:' + MAIL + '?subject=' + encodeURIComponent('Päring kodulehelt: ' + (svcVal() || 'üldehitustööd')) + '&body=' + encodeURIComponent(lines().join('\r\n').slice(0, 1800));
+  }
+  function waHref() {
+    return 'https://wa.me/' + WA_NUM + '?text=' + encodeURIComponent(('Tere! Soovin pakkumist.\n' + lines().join('\n')).trim().slice(0, 1500));
   }
   function setSending(on) {
     sending = on; btn.disabled = on; form.classList.toggle('sending', on);
     form.setAttribute('aria-busy', on ? 'true' : 'false'); btnLabel.textContent = on ? 'Saadame…' : btnText;
   }
-  function showError() { field('f-err-mail').href = mailHref(); errBox.classList.add('on'); errBox.scrollIntoView({ block: 'nearest' }); }
+  function showError() {
+    field('f-err-mail').href = mailHref(); field('f-err-wa').href = waHref(); field('f-err-ph').hidden = photos.length === 0;
+    errBox.classList.add('on'); errBox.scrollIntoView({ block: 'nearest' });
+    try { errBox.focus({ preventScroll: true }); } catch (err) {}
+  }
   function showSent() {
     form.classList.add('done'); clearPhotos();
     var t = field('f-sent-t');

@@ -24,7 +24,7 @@
       areaN.textContent = area.value; area.setAttribute('aria-valuetext', 'umbes ' + area.value + ' ruutmeetrit');
       var l = line();
       if (msg) { var rest = msg.value.replace(LINE_RE, ''); msg.value = l ? (l + (rest ? '\n' + rest : '')) : rest; }
-      measLine.textContent = l ? 'Päringu esimene rida: ' + l : 'Valige töö liik, siis koostame päringu esimese rea.';
+      measLine.textContent = l ? 'Päringu esimene rida: ' + l : 'Valige tööliik, siis koostame päringu esimese rea.';
     };
     area.addEventListener('input', apply);
     d.querySelectorAll('#jobs input').forEach(function(r){ r.addEventListener('change', apply); });
