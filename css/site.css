@@ -198,6 +198,7 @@ figcaption.fc{margin-top:8px;font-size:15px;line-height:1.35;color:var(--ink-2)}
 .sv-cta svg{width:34px;height:34px}
 .sv-cta a:hover{background:var(--ink);color:var(--y)}
 .sv-cta a:hover p{color:var(--y)}
+@media (min-width:700px){.sv-cta{grid-column:span 2}}
 @media (min-width:1000px){.sv-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media (max-width:699px){
   .sv-grid{display:block;border-top:1px solid var(--line)}
